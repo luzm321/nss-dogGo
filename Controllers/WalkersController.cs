@@ -19,7 +19,8 @@ namespace DogGo.Controllers
             _walkerRepo = walkerRepository;
         }
 
-        // GET: WalkersController (Walkers)
+        // GET: WalkersController
+        // GET: Walkers
         // Method gets all the walkers in the Walker table, convert it to a List and pass it off to the view.
         public ActionResult Index()
         {
@@ -29,9 +30,17 @@ namespace DogGo.Controllers
         }
 
         // GET: WalkersController/Details/5
+        // GET: Walkers/Details/5
         public ActionResult Details(int id)
         {
-            return View();
+            Walker walker = _walkerRepo.GetWalkerById(id);
+
+            if (walker == null)
+            {
+                return NotFound();
+            }
+
+            return View(walker);
         }
 
         // GET: WalkersController/Create
