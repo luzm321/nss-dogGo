@@ -84,8 +84,7 @@ namespace DogGo.Repositories
                         FROM Walker w
                         INNER JOIN Neighborhood n
                         ON w.NeighborhoodId = n.Id
-                        WHERE w.Id = @id
-                    ";
+                        WHERE w.Id = @id";
 
                     cmd.Parameters.AddWithValue("@id", id);
 
