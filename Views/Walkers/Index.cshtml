@@ -22,7 +22,8 @@
                 @Html.DisplayNameFor(model => model.NeighborhoodId)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.ImageUrl)
+                @*@Html.DisplayNameFor(model => model.ImageUrl)*@
+                Avatar
             </th>
             <th></th>
         </tr>
@@ -44,8 +45,8 @@
                 <img src="@item.ImageUrl" alt="avatar" />
             </td>
             <td>
-                @Html.ActionLink("Edit", "Edit", new { id=item.Id }),
-                @Html.ActionLink("Details", "Details", new { id=item.Id }),
+                @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |
+                @Html.ActionLink("Details", "Details", new { id=item.Id }) |
                 @Html.ActionLink("Delete", "Delete", new { id=item.Id })
             </td>
         </tr>
