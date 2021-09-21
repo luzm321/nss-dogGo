@@ -89,9 +89,12 @@ namespace DogGo.Controllers
         }
 
         // GET: OwnersController/Delete/5
+        // GET: Owners/Delete/Id
+        // Create a view that asks the user to confirm the deletion:
         public ActionResult Delete(int id)
         {
-            return View();
+            Owner owner = _ownerRepo.GetOwnerById(id);
+            return View(owner);
         }
 
         // POST: OwnersController/Delete/5
