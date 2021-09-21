@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -16,5 +14,6 @@ namespace DogGo.Models
         public int NeighborhoodId { get; set; }
         public string Phone { get; set; }
         public Neighborhood Neighborhood { get; set; }
+        public List<Dog> Dogs { get; set; }
     }
 }
