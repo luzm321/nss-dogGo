@@ -68,9 +68,17 @@ namespace DogGo.Controllers
         }
 
         // GET: OwnersController/Edit/5
+        // GET: Owners/Edit/Id
         public ActionResult Edit(int id)
         {
-            return View();
+            Owner owner = _ownerRepo.GetOwnerById(id);
+
+            if (owner == null)
+            {
+                return NotFound();
+            }
+
+            return View(owner);
         }
 
         // POST: OwnersController/Edit/5
