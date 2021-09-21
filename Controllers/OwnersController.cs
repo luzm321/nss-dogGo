@@ -44,6 +44,7 @@ namespace DogGo.Controllers
         }
 
         // GET: OwnersController/Create
+        // Creates a blank HTML form to be filled out with input from user with Create View:
         public ActionResult Create()
         {
             return View();
