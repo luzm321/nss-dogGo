@@ -176,6 +176,24 @@ namespace DogGo.Repositories
             }
         }
 
+        // DELETE: Dog
+        public void DeleteDog(int dogId)
+        {
+            using (SqlConnection conn = Connection)
+            {
+                conn.Open();
 
+                using (SqlCommand cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"
+                            DELETE FROM Dog
+                            WHERE Id = @id";
+
+                    cmd.Parameters.AddWithValue("@id", dogId);
+
+                    cmd.ExecuteNonQuery();
+                }
+            }
+        }
     }
 }
