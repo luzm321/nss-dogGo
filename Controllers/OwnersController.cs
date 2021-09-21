@@ -51,17 +51,19 @@ namespace DogGo.Controllers
         }
 
         // POST: OwnersController/Create
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        // POST: Owners/Create
+        [HttpPost] // Flag attribute informing app the kind of request it should handle
+        [ValidateAntiForgeryToken] // Flag attribute informing app the kind of request it should handle
+        public ActionResult Create(Owner owner)
         {
             try
             {
-                return RedirectToAction(nameof(Index));
+                _ownerRepo.AddOwner(owner);
+                return RedirectToAction("Index");
             }
-            catch
+            catch(Exception ex)
             {
-                return View();
+                return View(owner);
             }
         }
 
