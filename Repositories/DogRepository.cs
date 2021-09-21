@@ -67,6 +67,57 @@ namespace DogGo.Repositories
             }
         }
 
+        // GET: Dog by Id
+        public Dog GetDogById(int id)
+        {
+            using (SqlConnection conn = Connection)
+            {
+                conn.Open();
+                using (SqlCommand cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"SELECT d.Id, 
+                                               d.[Name],  
+                                               d.Breed, 
+                                               ISNULL(d.Notes, 'No Notes') [Notes], 
+                                               ISNULL(d.ImageUrl, 'No Image') [DogImageUrl], 
+                                               o.Name [Owner Name],
+                                               o.Id [OwnerId]
+                                      FROM Dog d
+                                      LEFT JOIN Owner o
+                                      ON d.OwnerId = o.Id
+                                      WHERE d.Id = @id";
+
+                    cmd.Parameters.AddWithValue("@id", id);
+
+                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {                        
+                            Dog dog = new Dog
+                            {
+                                Id = reader.GetInt32(reader.GetOrdinal("Id")),
+                                Name = reader.GetString(reader.GetOrdinal("Name")),
+                                Breed = reader.GetString(reader.GetOrdinal("Breed")),
+                                Notes = reader.GetString(reader.GetOrdinal("Notes")),
+                                ImageUrl = reader.GetString(reader.GetOrdinal("DogImageUrl")),
+                                OwnerId = reader.GetInt32(reader.GetOrdinal("OwnerId")),
+                                Owner = new Owner
+                                {
+                                    Name = reader.GetString(reader.GetOrdinal("Owner Name"))
+                                }
+                            };
+
+                            return dog;
+                        }
+                        else
+                        {
+                            return null;
+                        }
+                    }
+                }
+            }
+        }
+
 
     }
 }
