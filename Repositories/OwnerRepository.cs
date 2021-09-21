@@ -33,7 +33,7 @@ namespace DogGo.Repositories
                 conn.Open();
                 using (SqlCommand cmd = conn.CreateCommand())
                 {
-                    cmd.CommandText = @"SELECT o.Id, o.Email, o.Name, o.Address, o.NeighborhoodId, o.Phone, n.Name [Neighborhood Name]
+                    cmd.CommandText = @"SELECT o.Id, o.Email, o.Name, o.Address, o.NeighborhoodId, o.Phone, n.Id [nId], n.Name [Neighborhood Name]
                                       FROM Owner o
                                       INNER JOIN Neighborhood n
                                       ON o.NeighborhoodId = n.Id";
@@ -57,6 +57,7 @@ namespace DogGo.Repositories
                             {
                                 owner.Neighborhood = new Neighborhood
                                 {
+                                    Id = reader.GetInt32(reader.GetOrdinal("nId")),
                                     Name = reader.GetString(reader.GetOrdinal("Neighborhood Name"))
                                 };
                             }
@@ -77,7 +78,7 @@ namespace DogGo.Repositories
                 conn.Open();
                 using (SqlCommand cmd = conn.CreateCommand())
                 {
-                    cmd.CommandText = @"SELECT o.Id, o.Email, o.Name, o.Address, o.NeighborhoodId, o.Phone, n.Name [Neighborhood Name]
+                    cmd.CommandText = @"SELECT o.Id, o.Email, o.Name, o.Address, o.NeighborhoodId, o.Phone, n.Id [nId], n.Name [Neighborhood Name]
                                       FROM Owner o
                                       INNER JOIN Neighborhood n
                                       ON o.NeighborhoodId = n.Id
@@ -104,6 +105,7 @@ namespace DogGo.Repositories
                             {
                                 owner.Neighborhood = new Neighborhood
                                 {
+                                    Id = reader.GetInt32(reader.GetOrdinal("nId")),
                                     Name = reader.GetString(reader.GetOrdinal("Neighborhood Name"))
                                 };
                             }
