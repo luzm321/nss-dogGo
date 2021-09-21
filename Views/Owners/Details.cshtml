@@ -52,12 +52,16 @@
         </dt>
     </dl>
 
-    @foreach (var item in Model.Dogs)
+    @foreach (var dog in Model.Dogs)
     {
-        <dl class="col-sm-10">
-            Name: <dd class="col-sm-10">@Html.DisplayFor(modelItem => item.Name)</dd>
-            Breed: <dd class="col-sm-10">@Html.DisplayFor(modelItem => item.Breed)</dd>
-        </dl>
+        @*<dl class="col-sm-10">
+            Name: <dd class="col-sm-10">@Html.DisplayFor(modelItem => dog.Name)</dd>
+            Breed: <dd class="col-sm-10">@Html.DisplayFor(modelItem => dog.Breed)</dd>
+        </dl>*@
+        <ul class="col-sm-10">
+            <li>Name: @dog.Name</li>
+            <li>Breed: @dog.Breed</li>
+        </ul>
     }
 </div>
 
