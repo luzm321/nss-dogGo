@@ -42,23 +42,28 @@ namespace DogGo.Controllers
         }
 
         // GET: DogsController/Create
+        // GET: Dogs/Create
+        // Creates a blank HTML form to be filled out with input from user with Create View:
         public ActionResult Create()
         {
             return View();
         }
 
         // POST: DogsController/Create
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        // POST: Dogs/Create
+        [HttpPost] // Flag attribute informing app the kind of request it should handle
+        [ValidateAntiForgeryToken] // Flag attribute informing app the kind of request it should handle
+        public ActionResult Create(Dog dog)
         {
             try
             {
-                return RedirectToAction(nameof(Index));
+                _dogRepo.AddDog(dog);
+                return RedirectToAction("Index");
             }
-            catch
+            catch (Exception ex)
             {
-                return View();
+                Console.WriteLine(ex.Message);
+                return View(dog);
             }
         }
 
