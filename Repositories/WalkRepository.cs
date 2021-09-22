@@ -35,7 +35,7 @@ namespace DogGo.Repositories
                 using (SqlCommand cmd = conn.CreateCommand())
                 {
                     cmd.CommandText = @"SELECT w.Id, w.Date, w.WalkerId, w.DogId, w.Duration, wk.Name [Walker Name], d.Name [Dog Name]
-                                      FROM Walk w
+                                      FROM Walks w
                                       INNER JOIN Walker wk
                                       ON w.WalkerId = wk.Id
                                       INNER JOIN Dog d
@@ -96,7 +96,7 @@ namespace DogGo.Repositories
                                                w.Duration
                                                wk.Name [Walker Name],
                                                d.Name [Dog Name]
-                                      FROM Walk w
+                                      FROM Walks w
                                       INNER JOIN Walker wk
                                       ON w.WalkerId = wk.Id
                                       INNER JOIN Dog d 
@@ -159,7 +159,7 @@ namespace DogGo.Repositories
                 using (SqlCommand cmd = conn.CreateCommand())
                 {
                     cmd.CommandText = @"
-                    INSERT INTO Walk (Date, WalkerId, DogId, Duration)
+                    INSERT INTO Walks (Date, WalkerId, DogId, Duration)
                     OUTPUT INSERTED.ID
                     VALUES (@date, @walkerId, @dogId, @duration);
                 ";
@@ -176,6 +176,33 @@ namespace DogGo.Repositories
             }
         }
 
+        // UPDATE: Walk
+        public void UpdateWalk(Walk walk)
+        {
+            using (SqlConnection conn = Connection)
+            {
+                conn.Open();
 
+                using (SqlCommand cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"
+                            UPDATE Walks
+                            SET 
+                                Date = @date, 
+                                WalkerId = @walkerId, 
+                                DogId = @dogId, 
+                                Duration = @duration
+                            WHERE Id = @id";
+
+                    cmd.Parameters.AddWithValue("@date", walk.Date);
+                    cmd.Parameters.AddWithValue("@walkerId", walk.WalkerId);
+                    cmd.Parameters.AddWithValue("@dogId", walk.DogId);
+                    cmd.Parameters.AddWithValue("@duration", walk.Duration);
+                    cmd.Parameters.AddWithValue("@id", walk.Id);
+
+                    cmd.ExecuteNonQuery();
+                }
+            }
+        }
     }
 }
