@@ -1,0 +1,75 @@
+﻿@model IEnumerable<DogGo.Models.Walk>
+
+@{
+    ViewData["Title"] = "Walks";
+}
+
+<h1>List of Walks</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Id)
+            </th>
+            @*<th>
+                @Html.DisplayNameFor(model => model.Date)
+            </th>*@
+            <th>
+                @*@Html.DisplayNameFor(model => model.ParsedDateTime)*@
+                Date
+            </th>
+            <th>
+                @*@Html.DisplayNameFor(model => model.WalkerId)*@
+                Walker
+            </th>
+            <th>
+                @*@Html.DisplayNameFor(model => model.DogId)*@
+                Dog
+            </th>
+            @*<th>
+                @Html.DisplayNameFor(model => model.Duration)
+            </th>*@
+            <th>
+                @*@Html.DisplayNameFor(model => model.DurationInMinutes)*@
+                Duration in Minutes
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Id)
+            </td>
+            @*<td>
+                @Html.DisplayFor(modelItem => item.Date)
+            </td>*@
+            <td>
+                @Html.DisplayFor(modelItem => item.ParsedDateTime)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Walker.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Dog.Name)
+            </td>
+            @*<td>
+                @Html.DisplayFor(modelItem => item.Duration)
+            </td>*@
+            <td>
+                @Html.DisplayFor(modelItem => item.DurationInMinutes)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |
+                @Html.ActionLink("Details", "Details", new { id=item.Id }) |
+                @Html.ActionLink("Delete", "Delete", new { id=item.Id })
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
