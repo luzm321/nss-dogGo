@@ -92,26 +92,33 @@ namespace DogGo.Controllers
             }
             catch(Exception ex)
             {
+                Console.WriteLine(ex.Message);
                 return View(owner);
             }
         }
 
         // GET: OwnersController/Edit/5
-        // GET: Owners/Edit/Id
+        // GET: Owners/Edit/{Id}
         public ActionResult Edit(int id)
         {
-            Owner owner = _ownerRepo.GetOwnerById(id);
+            List<Neighborhood> neighborhoods = _neighborhoodRepo.GetAllNeighborhoods();
 
-            if (owner == null)
+            OwnerFormViewModel vm = new OwnerFormViewModel()
+            {
+                Owner = new Owner(),
+                Neighborhoods = neighborhoods
+            };
+
+            if (vm == null)
             {
                 return NotFound();
             }
 
-            return View(owner);
+            return View(vm);
         }
 
         // POST: OwnersController/Edit/5
-        // POST: Owners/Edit/Id
+        // POST: Owners/Edit/{Id}
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit(int id, Owner owner)
@@ -123,12 +130,13 @@ namespace DogGo.Controllers
             }
             catch(Exception ex)
             {
+                Console.WriteLine(ex.Message);
                 return View(owner);
             }
         }
 
         // GET: OwnersController/Delete/5
-        // GET: Owners/Delete/Id
+        // GET: Owners/Delete/{Id}
         // Create a view that asks the user to confirm the deletion:
         public ActionResult Delete(int id)
         {
@@ -137,7 +145,7 @@ namespace DogGo.Controllers
         }
 
         // POST: OwnersController/Delete/5
-        // POST: Owners/Delete/Id
+        // POST: Owners/Delete/{Id}
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Delete(int id, Owner owner)
@@ -149,6 +157,7 @@ namespace DogGo.Controllers
             }
             catch(Exception ex)
             {
+                Console.WriteLine(ex.Message);
                 return View(owner);
             }
         }
