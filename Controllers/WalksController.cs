@@ -43,65 +43,87 @@ namespace DogGo.Controllers
         }
 
         // GET: WalksController/Create
+        // GET: Walks/Create
+        // Creates a blank HTML form to be filled out with input from user with Create View:
         public ActionResult Create()
         {
             return View();
         }
 
         // POST: WalksController/Create
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        // POST: Walks/Create
+        [HttpPost] // Flag attribute informing app the kind of request it should handle
+        [ValidateAntiForgeryToken] // Flag attribute informing app the kind of request it should handle
+        public ActionResult Create(Walk walk)
         {
             try
             {
-                return RedirectToAction(nameof(Index));
+                _walkRepo.AddWalk(walk);
+                return RedirectToAction("Index");
             }
-            catch
+            catch (Exception ex)
             {
-                return View();
+                Console.WriteLine(ex.Message);
+                return View(walk);
             }
         }
 
         // GET: WalksController/Edit/5
+        // GET: Walks/Edit/Id
         public ActionResult Edit(int id)
         {
-            return View();
+            Walk walk = _walkRepo.GetWalkById(id);
+
+            if (walk == null)
+            {
+                return NotFound();
+            }
+
+            return View(walk);
         }
 
         // POST: WalksController/Edit/5
+        // POST: Walks/Edit/Id
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public ActionResult Edit(int id, Walk walk)
         {
             try
             {
-                return RedirectToAction(nameof(Index));
+                _walkRepo.UpdateWalk(walk);
+                return RedirectToAction("Index");
             }
-            catch
+            catch (Exception ex)
             {
-                return View();
+                Console.WriteLine(ex.Message);
+                return View(walk);
             }
         }
 
         // GET: WalksController/Delete/5
+        // GET: Walks/Delete/Id
+        // Create a view that asks the user to confirm the deletion:
         public ActionResult Delete(int id)
         {
-            return View();
+            Walk walk = _walkRepo.GetWalkById(id);
+            return View(walk);
         }
 
         // POST: WalksController/Delete/5
+        // POST: Walks/Delete/Id
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
+        public ActionResult Delete(int id, Walk walk)
         {
             try
             {
-                return RedirectToAction(nameof(Index));
+                _walkRepo.DeleteWalk(id);
+                return RedirectToAction("Index");
             }
-            catch
+            catch (Exception ex)
             {
-                return View();
+                Console.WriteLine(ex.Message);
+                return View(walk);
             }
         }
     }
