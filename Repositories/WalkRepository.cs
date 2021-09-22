@@ -39,7 +39,8 @@ namespace DogGo.Repositories
                                       INNER JOIN Walker wk
                                       ON w.WalkerId = wk.Id
                                       INNER JOIN Dog d
-                                      ON w.DogId = d.Id";
+                                      ON w.DogId = d.Id
+                                      ORDER BY d.Name";
                     using (SqlDataReader reader = cmd.ExecuteReader())
                     {
                         List<Walk> walks = new List<Walk>();
@@ -222,6 +223,46 @@ namespace DogGo.Repositories
                     cmd.Parameters.AddWithValue("@id", walkId);
 
                     cmd.ExecuteNonQuery();
+                }
+            }
+        }
+
+        // GET: List of walks by a walker by walkerId:
+        public List<Walk> GetWalksByWalkerId(int walkerId)
+        {
+            using (SqlConnection conn = Connection)
+            {
+                conn.Open();
+
+                using (SqlCommand cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"
+                SELECT Id, Date, WalkerId, DogId, Duration
+                FROM Walks
+                WHERE WalkerId = @walkerId
+            ";
+
+                    cmd.Parameters.AddWithValue("@walkerId", walkerId);
+
+                    SqlDataReader reader = cmd.ExecuteReader();
+
+                    List<Walk> walks = new List<Walk>();
+
+                    while (reader.Read())
+                    {
+                        Walk walk = new Walk()
+                        {
+                            Id = reader.GetInt32(reader.GetOrdinal("Id")),
+                            Date = reader.GetDateTime(reader.GetOrdinal("Date")),
+                            WalkerId = reader.GetInt32(reader.GetOrdinal("WalkerId")),
+                            DogId = reader.GetInt32(reader.GetOrdinal("DogId")),
+                            Duration = reader.GetInt32(reader.GetOrdinal("Duration"))
+                        };
+
+                        walks.Add(walk);
+                    }
+                    reader.Close();
+                    return walks;
                 }
             }
         }

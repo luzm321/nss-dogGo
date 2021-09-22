@@ -12,6 +12,7 @@ namespace DogGo.Models
         public int NeighborhoodId { get; set; }
         public string ImageUrl { get; set; }
         public Neighborhood Neighborhood { get; set; }
+        public List<Walk> Walks { get; set; }
     }
 }
 
