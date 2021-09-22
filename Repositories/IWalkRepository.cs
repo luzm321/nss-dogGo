@@ -13,6 +13,6 @@ namespace DogGo.Repositories
         void AddWalk(Walk walk);
         void UpdateWalk(Walk walk);
         void DeleteWalk(int walkId);
-        //List<Walk> GetWalksByWalkerId(int walkerId);
+        List<Walk> GetWalksByWalkerId(int walkerId);
     }
 }
