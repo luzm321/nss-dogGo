@@ -90,39 +90,29 @@ namespace DogGo.Repositories
                 conn.Open();
                 using (SqlCommand cmd = conn.CreateCommand())
                 {
-                    cmd.CommandText = @"SELECT w.Id, 
-                                               w.Date, 
-                                               w.WalkerId, 
-                                               w.DogId, 
-                                               w.Duration
-                                               wk.Name [Walker Name],
-                                               d.Name [Dog Name]
-                                      FROM Walks w
-                                      INNER JOIN Walker wk
-                                      ON w.WalkerId = wk.Id
-                                      INNER JOIN Dog d 
-                                      ON w.DogId = d.Id
-                                      WHERE w.Id = @id";
+                    cmd.CommandText = @"SELECT w.Id, w.Date, w.Duration, w.WalkerId, w.DogId, wk.Name [Walker Name], d.Name [Dog Name]
+                                        FROM Walks w
+                                        INNER JOIN Walker wk
+                                        ON w.WalkerId = wk.Id
+                                        INNER JOIN Dog d 
+                                        ON w.DogId = d.Id
+                                        WHERE w.Id = @id";
 
                     cmd.Parameters.AddWithValue("@id", id);
 
-                    Walk walk = null;
-
                     using (SqlDataReader reader = cmd.ExecuteReader())
                     {
-                        while (reader.Read())
+                        if (reader.Read())
                         {
-                            if (walk == null)
+                            Walk walk = new Walk
                             {
-                                walk = new Walk
-                                {
-                                    Id = reader.GetInt32(reader.GetOrdinal("Id")),
-                                    Date = reader.GetDateTime(reader.GetOrdinal("Date")),
-                                    WalkerId = reader.GetInt32(reader.GetOrdinal("WalkerId")),
-                                    DogId = reader.GetInt32(reader.GetOrdinal("DogId")),
-                                    Duration = reader.GetInt32(reader.GetOrdinal("Duration")),
-                                };
-                            }
+                                Id = reader.GetInt32(reader.GetOrdinal("Id")),
+                                Date = reader.GetDateTime(reader.GetOrdinal("Date")),
+                                Duration = reader.GetInt32(reader.GetOrdinal("Duration")),
+                                WalkerId = reader.GetInt32(reader.GetOrdinal("WalkerId")),
+                                DogId = reader.GetInt32(reader.GetOrdinal("DogId"))
+                            };
+
                             // If there is a DogId in the database:
                             if (!reader.IsDBNull(reader.GetOrdinal("DogId")))
                             {
@@ -139,14 +129,14 @@ namespace DogGo.Repositories
                                     Name = reader.GetString(reader.GetOrdinal("Walker Name"))
                                 };
                             }
-                            else
-                            {
-                                return null;
-                            }
-                        }
 
-                        return walk;
-                    }
+                            return walk;
+                        }
+                        else
+                        {
+                            return null;
+                        }
+                    }           
                 }
             }
         }
