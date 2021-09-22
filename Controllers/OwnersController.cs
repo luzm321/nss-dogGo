@@ -15,16 +15,19 @@ namespace DogGo.Controllers
         private readonly IOwnerRepository _ownerRepo;
         private readonly IDogRepository _dogRepo;
         private readonly IWalkerRepository _walkerRepo;
+        private readonly INeighborhoodRepository _neighborhoodRepo;
 
         // ASP.NET will give an instance of Owner Repository, a.k.a. "Dependency Injection"
         public OwnersController(
             IOwnerRepository ownerRepository,
             IDogRepository dogRepository,
-            IWalkerRepository walkerRepository)
+            IWalkerRepository walkerRepository,
+            INeighborhoodRepository neighborhoodRepository)
         {
             _ownerRepo = ownerRepository;
             _dogRepo = dogRepository;
             _walkerRepo = walkerRepository;
+            _neighborhoodRepo = neighborhoodRepository;
         }
 
         // GET: OwnersController
@@ -61,10 +64,19 @@ namespace DogGo.Controllers
         }
 
         // GET: OwnersController/Create
+        // GET: Owners/Create
         // Creates a blank HTML form to be filled out with input from user with Create View:
         public ActionResult Create()
         {
-            return View();
+            List<Neighborhood> neighborhoods = _neighborhoodRepo.GetAllNeighborhoods();
+
+            OwnerFormViewModel vm = new OwnerFormViewModel()
+            {
+                Owner = new Owner(),
+                Neighborhoods = neighborhoods
+            };
+
+            return View(vm);
         }
 
         // POST: OwnersController/Create
