@@ -28,6 +28,14 @@ namespace DogGo.Models
                 return Duration / 60;
             }
         }
+
+        public int TotalDurationTime
+        {
+            get
+            {
+                return Duration += Duration / 120;
+            }
+        }
         // may need to make a list of duration times to calculate the total walk time of each walker   
     }
 }
