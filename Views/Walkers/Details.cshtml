@@ -47,6 +47,19 @@
                         </div>
                     </div>
                 }
+
+                <h1>Total Walk Time:</h1>
+                <span class="ml-4" style="font-size: 35px">@Model.Walk.TotalDurationTime minutes</span>
+
+                @*<div>
+                    @for (int i = 0; i < Model.Walks.Count; i++)
+                    {
+                        <h1>Total Walk Time:</h1>
+                        <span class="font-weight-bold ml-4">@Model.Walk.TotalDurationTime</span>
+                    }
+                </div>*@
+                @*<div>@Model.Walks.Select(@walk => @walk.TotalDurationTime)</div>*@
+
             </div>
         </section>
     </div>
@@ -56,8 +69,3 @@
     <a asp-action="Index">Back to List</a>
 </div>
 
-@*class="col-lg-4 col-md-8 container mt-5
-    class="list-group mt-4"
-    class="list-group-item disabled" aria-disabled="true"
-    <span class="font-weight-bold ml-4"></span>
-    <h1>Walkers Near Me</h1>*@
