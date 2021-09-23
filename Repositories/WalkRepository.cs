@@ -34,12 +34,14 @@ namespace DogGo.Repositories
                 conn.Open();
                 using (SqlCommand cmd = conn.CreateCommand())
                 {
-                    cmd.CommandText = @"SELECT w.Id, w.Date, w.WalkerId, w.DogId, w.Duration, wk.Name [Walker Name], d.Name [Dog Name]
+                    cmd.CommandText = @"SELECT w.Id, w.Date, w.WalkerId, w.DogId, w.Duration, wk.Name [Walker Name], d.Name [Dog Name], o.Name [Owner Name], o.Id [ownerId]
                                       FROM Walks w
-                                      INNER JOIN Walker wk
+                                      LEFT JOIN Walker wk
                                       ON w.WalkerId = wk.Id
-                                      INNER JOIN Dog d
+                                      LEFT JOIN Dog d
                                       ON w.DogId = d.Id
+                                      LEFT JOIN Owner o
+                                      ON o.Id = d.OwnerId
                                       ORDER BY d.Name";
                     using (SqlDataReader reader = cmd.ExecuteReader())
                     {
@@ -70,6 +72,14 @@ namespace DogGo.Repositories
                                 walk.Dog = new Dog
                                 {
                                     Name = reader.GetString(reader.GetOrdinal("Dog Name"))
+                                };
+                            }
+                            // If there is an OwnerId in the database:
+                            if (!reader.IsDBNull(reader.GetOrdinal("Owner Name")))
+                            {
+                                walk.Owner = new Owner()
+                                {
+                                    Name = reader.GetString(reader.GetOrdinal("Owner Name"))
                                 };
                             }
 
