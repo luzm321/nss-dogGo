@@ -34,6 +34,7 @@ namespace DogGo.Controllers
 
         // GET: DogsController/Details/5
         // GET: Dogs/Details/Id
+        [Authorize]
         public ActionResult Details(int id)
         {
             Dog dog = _dogRepo.GetDogById(id);
@@ -57,16 +58,20 @@ namespace DogGo.Controllers
 
         // POST: DogsController/Create
         // POST: Dogs/Create
+        [Authorize]
         [HttpPost] // Flag attribute informing app the kind of request it should handle
         [ValidateAntiForgeryToken] // Flag attribute informing app the kind of request it should handle
         public ActionResult Create(Dog dog)
         {
             try
             {
-                // update the dogs OwnerId to the current user's Id
-                dog.OwnerId = GetCurrentUserId();
-                _dogRepo.AddDog(dog);
-                return RedirectToAction("Index");
+                // update the dogs OwnerId to the current user's Id and check if user is authenticated:
+                if (dog.OwnerId == GetCurrentUserId())
+                {
+                    _dogRepo.AddDog(dog);
+                    return RedirectToAction("Index");
+                }
+                return StatusCode(403);
             }
             catch (Exception ex)
             {
@@ -84,7 +89,8 @@ namespace DogGo.Controllers
 
             if (dog == null)
             {
-                return NotFound();
+                //return NotFound();
+                return StatusCode(403);
             }
 
             return View(dog);
@@ -92,14 +98,19 @@ namespace DogGo.Controllers
 
         // POST: DogsController/Edit/5
         // POST: Dogs/Edit/Id
+        [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit(int id, Dog dog)
         {
             try
             {
-                _dogRepo.UpdateDog(dog);
-                return RedirectToAction("Index");
+                if (dog.OwnerId == GetCurrentUserId())
+                {
+                    _dogRepo.UpdateDog(dog);
+                    return RedirectToAction("Index");
+                }
+                return StatusCode(403);
             }
             catch (Exception ex)
             {
@@ -120,14 +131,19 @@ namespace DogGo.Controllers
 
         // POST: DogsController/Delete/5
         // POST: Dogs/Delete/Id
+        [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Delete(int id, Dog dog)
         {
             try
             {
-                _dogRepo.DeleteDog(id);
-                return RedirectToAction("Index");
+                if (dog.OwnerId == GetCurrentUserId())
+                {
+                    _dogRepo.DeleteDog(id);
+                    return RedirectToAction("Index");
+                }
+                return StatusCode(403);
             }
             catch (Exception ex)
             {
