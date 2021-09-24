@@ -14,7 +14,7 @@ namespace DogGo.Models
         public Neighborhood Neighborhood { get; set; }
         public List<Walk> Walks { get; set; }
         public Walk Walk { get; set; }
-        public Owner Client { get; set; }
+        public Owner Owner { get; set; }
         public Dog Dog { get; set; }
     }
 }

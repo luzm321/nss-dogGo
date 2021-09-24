@@ -20,7 +20,6 @@ namespace DogGo.Models
         public Walker Walker { get; set; }
         public Dog Dog { get; set; }
         public Owner Owner { get; set; }
-        public Owner Client { get; set; }
         public int DogId { get; set; }
         public int Duration { get; set; }
         public int DurationInMinutes
@@ -30,14 +29,5 @@ namespace DogGo.Models
                 return Duration / 60;
             }
         }
-
-        public int TotalDurationTime
-        {
-            get
-            {
-                return Duration += Duration / 120;
-            }
-        }
-        // may need to make a list of duration times to calculate the total walk time of each walker   
     }
 }
