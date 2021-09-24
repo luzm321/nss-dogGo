@@ -34,6 +34,9 @@
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Walkers" asp-action="Index">Walkers</a>
                             </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Walks" asp-action="Index">Walks</a>
+                            </li>
                             @if (User.IsInRole("DogOwner"))
                             {
                                 <li class="nav-item">
@@ -52,8 +55,8 @@
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Owners" asp-action="Login">Login</a>
                             </li>
                             @*<li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Walkers" asp-action="Index">Walkers</a>
-                            </li>*@
+                <a class="nav-link text-dark" asp-area="" asp-controller="Walkers" asp-action="Index">Walkers</a>
+            </li>*@
                         }
 
 
@@ -91,6 +94,11 @@
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+
+    @*------THIS IS WHAT WE'RE ADDING----*@
+    @*Adds client side validation to the application*@
+    <partial name="_ValidationScriptsPartial" />
+
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>

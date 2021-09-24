@@ -158,6 +158,5 @@ namespace DogGo.Controllers
             string id = User.FindFirstValue(ClaimTypes.NameIdentifier);
             return int.Parse(id);
         }
-
     }
 }
