@@ -31,23 +31,27 @@ namespace DogGo.Controllers
         // GET: WalkersController
         // GET: Walkers
         // Method gets all the walkers in the Walker table, convert it to a List and pass it off to the view.
+        List<Walker> walkers = new List<Walker>();
         public ActionResult Index()
         {
-            string id = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            int ownerId = int.Parse(id);
-            // Need to find way to pass owner Id...GetCurrentUserId as param?
-            Owner owner = _ownerRepo.GetOwnerById(ownerId);
-            if (owner.Id == GetCurrentUserId())
+            if (User.FindFirstValue(ClaimTypes.NameIdentifier) != null)
             {
-                List<Walker> walkers = _walkerRepo.GetWalkersInNeighborhood(owner.NeighborhoodId);
+                string id = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                int ownerId = int.Parse(id);
+                Owner owner = _ownerRepo.GetOwnerById(ownerId);
+                if (owner.Id == GetCurrentUserId())
+                {
+                    List<Walker> walkers = _walkerRepo.GetWalkersInNeighborhood(owner.NeighborhoodId);
+                    return View(walkers);
+                }
+            }          
+            //return NotFound();
+            else
+            {
+                List<Walker> walkers = _walkerRepo.GetAllWalkers();
                 return View(walkers);
             }
-            return NotFound();
-            //else
-            //{
-            //    List<Walker> allWalkers = _walkerRepo.GetAllWalkers();
-            //    return View(allWalkers);
-            //}
+            return View(walkers);
         }
 
         // GET: WalkersController/Details/5
