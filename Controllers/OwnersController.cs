@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 using DogGo.Repositories;
 using DogGo.Models;
 using DogGo.Models.ViewModels;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication;
 
 namespace DogGo.Controllers
 {
@@ -28,6 +31,50 @@ namespace DogGo.Controllers
             _dogRepo = dogRepository;
             _walkerRepo = walkerRepository;
             _neighborhoodRepo = neighborhoodRepository;
+        }
+
+        // Authenticating user when logging in:
+        // Creates razor view template for login page:
+        public ActionResult Login()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        // Look up owner by email address and save some of the data into a cookie to track/store data for authentication:
+        // Add owner's Id, email address, and role. Then take that license/cookie and give it back to whoever made the request.
+        // A cookie is a way to store data on a user's browser. After logging in, every time an owner makes a request to the server,
+        // the browser will automatically send up the value of that cookie to authenticate. 
+        public async Task<ActionResult> Login(LoginViewModel viewModel)
+        {
+            Owner owner = _ownerRepo.GetOwnerByEmail(viewModel.Email);
+
+            if (owner == null)
+            {
+                return Unauthorized();
+            }
+
+            List<Claim> claims = new List<Claim>
+    {
+        new Claim(ClaimTypes.NameIdentifier, owner.Id.ToString()),
+        new Claim(ClaimTypes.Email, owner.Email),
+        new Claim(ClaimTypes.Role, "DogOwner"),
+    };
+
+            ClaimsIdentity claimsIdentity = new ClaimsIdentity(
+                claims, CookieAuthenticationDefaults.AuthenticationScheme);
+
+            await HttpContext.SignInAsync(
+                CookieAuthenticationDefaults.AuthenticationScheme,
+                new ClaimsPrincipal(claimsIdentity));
+
+            return RedirectToAction("Index", "Dogs");
+        }
+
+        public async Task<ActionResult> Logout()
+        {
+            await HttpContext.SignOutAsync();
+            return RedirectToAction("Index", "Home");
         }
 
         // GET: OwnersController
@@ -79,10 +126,15 @@ namespace DogGo.Controllers
             return View(vm);
         }
 
-        // POST: OwnersController/Create
         // POST: Owners/Create
         [HttpPost] // Flag attribute informing app the kind of request it should handle
-        [ValidateAntiForgeryToken] // Flag attribute informing app the kind of request it should handle
+        //  Writes a unique value to an HTTP-only cookie and then the same value is written to the form.
+        //  When the page is submitted, an error is raised if the cookie value doesn't match the form value.
+        // Prevents cross site request forgeries. That is, a form from another site that posts to your site
+        // in an attempt to submit hidden content using an authenticated user's credentials.
+        // The attack involves tricking the logged in user into submitting a form, or by simply programmatically
+        // triggering a form when the page loads.
+        [ValidateAntiForgeryToken]
         public ActionResult Create(Owner owner)
         {
             try

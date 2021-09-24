@@ -6,6 +6,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using DogGo.Repositories;
 using DogGo.Models;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
 
 namespace DogGo.Controllers
 {
@@ -20,9 +22,12 @@ namespace DogGo.Controllers
         }
 
         // GET: DogsController
+        [Authorize]
         public ActionResult Index()
         {
-            List<Dog> dogs = _dogRepo.GetAllDogs();
+            int ownerId = GetCurrentUserId();
+
+            List<Dog> dogs = _dogRepo.GetDogsByOwnerId(ownerId);
 
             return View(dogs);
         }
@@ -44,6 +49,7 @@ namespace DogGo.Controllers
         // GET: DogsController/Create
         // GET: Dogs/Create
         // Creates a blank HTML form to be filled out with input from user with Create View:
+        [Authorize]
         public ActionResult Create()
         {
             return View();
@@ -57,6 +63,8 @@ namespace DogGo.Controllers
         {
             try
             {
+                // update the dogs OwnerId to the current user's Id
+                dog.OwnerId = GetCurrentUserId();
                 _dogRepo.AddDog(dog);
                 return RedirectToAction("Index");
             }
@@ -69,6 +77,7 @@ namespace DogGo.Controllers
 
         // GET: DogsController/Edit/5
         // GET: Dogs/Edit/Id
+        [Authorize]
         public ActionResult Edit(int id)
         {
             Dog dog = _dogRepo.GetDogById(id);
@@ -102,6 +111,7 @@ namespace DogGo.Controllers
         // GET: DogsController/Delete/5
         // GET: Dogs/Delete/Id
         // Create a view that asks the user to confirm the deletion:
+        [Authorize]
         public ActionResult Delete(int id)
         {
             Dog dog = _dogRepo.GetDogById(id);
@@ -125,5 +135,13 @@ namespace DogGo.Controllers
                 return View(dog);
             }
         }
+
+        // Method for getting current user by id:
+        private int GetCurrentUserId()
+        {
+            string id = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            return int.Parse(id);
+        }
+
     }
 }
