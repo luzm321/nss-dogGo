@@ -10,6 +10,7 @@ using DogGo.Models.ViewModels;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
 
 namespace DogGo.Controllers
 {
@@ -80,6 +81,7 @@ namespace DogGo.Controllers
         // GET: OwnersController
         // GET: Owners
         // Method gets all the owners in the Owner table, convert it to a List and pass it off to the view.
+        [Authorize]
         public ActionResult Index()
         {
             List<Owner> owners = _ownerRepo.GetAllOwners();
@@ -89,6 +91,7 @@ namespace DogGo.Controllers
 
         // GET: OwnersController/Details/5
         // GET: Owners/Details/Id
+        [Authorize]
         public ActionResult Details(int id)
         {
             Owner owner = _ownerRepo.GetOwnerById(id);
